@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>SoundCloud API</title>
+		<style>
+			body {
+				background: #efefef;
+				color: #444;
+				font-family: Helvetica, Arial;
+				text-align: center;
+			}
+
+			ul {
+				list-style: none;
+				margin: 0 0 1em 0;
+				padding: 0;
+			}
+
+			ul li a {
+				background: #333;
+				border: solid #000 1px;
+				border-radius: .2em;
+				color: #eee;
+				display: block;
+				font-size: 1.2em;
+				margin: .2em 0;
+				padding: .6em 1em;
+				text-align: left;
+				text-decoration: none;
+				text-transform: uppercase;
+			}
+
+			ul li a:hover {
+				background: #8ba8ca;
+				border-color: #889cb5;
+				color: #fff;
+			}
+		</style>
+	</head>
+	<body>
+
+		<h1>SoundCloud API</h1>
+
+		<ul>
+			<li><a href="#" class="genre">electro</a></li>
+			<li><a href="#" class="genre">glitchhop</a></li>
+			<li><a href="#" class="genre">dubstep</a></li>
+		</ul>
+
+		<div id="target"></div>
+
+		<script src="http://connect.soundcloud.com/sdk.js"></script>
+		<script>
+			//The SoundCloud Widget
+			function playSomeSound (genre) {
+				SC.get('/tracks', {
+					genres: genre,
+					bpm: {
+						from: 100
+					}
+				}, function (tracks) {
+					var random = Math.floor(Math.random() * 49);
+					SC.oEmbed(tracks[random].uri, { auto_play: true },document.getElementById('target'));
+				});
+			};
+
+			window.onload = function() {
+				SC.initialize( {
+					client_id: '2d9c661fa1c413ad89f1584ac7cab2b6'
+				});
+				var menuLinks = document.getElementsByClassName('genre');
+				for (var i = 0; i < menuLinks.length; i++) {
+					var menuLink = menuLinks[i];
+					menuLink.onclick = function(e) {
+						e.preventDefault();
+						playSomeSound(menuLink.innerHTML);
+					};
+				};
+			};
+		</script>
+	</body>
+</html>
